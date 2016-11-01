@@ -4,7 +4,11 @@ class ArticlesController < ApplicationController
   # GET /articles
   # GET /articles.json
   def index
-    @articles = Article.all
+    @articles = if (words = params[:words]).present?
+                  Article.full_text_search(words, params[:highlight])
+                else
+                  Article.none
+                end
   end
 
   # GET /articles/1
