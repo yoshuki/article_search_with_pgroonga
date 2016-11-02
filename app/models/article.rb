@@ -5,6 +5,7 @@ class Article < ApplicationRecord
     articles = select("#{quoted_table_name}.*, pgroonga.score(#{quoted_table_name}) AS pgroonga_score")
                .where("title #{operator} ? OR body #{operator} ?", query, query)
                .reorder('pgroonga_score DESC')
+               .extending(DisableSequentialScan)
 
     return articles unless highlight
 
